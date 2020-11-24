@@ -1,0 +1,26 @@
+form {
+  margin-top: 10%;
+}
+
+.button{
+  margin-top: 4rem;
+}
+button{
+  background-color: #E01E4C;
+  border:none;
+  width: 100%;
+   padding: 12px;
+    margin-top: 9px;
+    color: white;
+}
+label {
+  display:block;
+}
+input{
+  padding:12px;
+}
+
+.form-control:focus{
+  border-color: #d8dee4 !important;
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0);
+}

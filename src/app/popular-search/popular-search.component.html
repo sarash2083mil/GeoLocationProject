@@ -1,0 +1,33 @@
+<div class="popular-search">
+    <nav class="nav">
+        <li class="nav-item">
+            <button type="button btn" (click)="close()">finish</button>
+        </li>
+        <!-- Navbar content -->
+    </nav>
+    <div class="row">
+        <div class="one-popular col-md-4 offset-2">
+            <h5 class="white_p">Most Popular Distance</h5>
+            <h1>
+                <p class="yellow bold">{{numOfRequests || "is'nt aviable"}}</p>
+            </h1>
+            <p class="yellow">{{origin || "origin"}} </p> | <p class="yellow">{{destination || "destination"}}</p>
+        </div>
+        <div class="vertical-line"></div>
+        <div class="answer col-md-4">
+            <h5 class="white_p">Distance in KM</h5>
+            <h1>
+                <p class="yellow bold">{{distanceInKm || "is'nt aviable"}}</p>
+            </h1>
+        </div>
+
+
+    </div>
+    <div *ngIf="!numOfRequests">
+        <h5 class="white_p not_aviable"> list of popular results is'nt aviable</h5>
+    </div>
+    <div class="most-popular-lists col-md-6 offset-2 " *ngIf="numOfRequests">
+        <h5 class="white_p">list of popular results</h5>
+        <list-item [searchItem]="searchItem" *ngFor="let searchItem of popularSearchesList"></list-item>
+    </div>
+</div>

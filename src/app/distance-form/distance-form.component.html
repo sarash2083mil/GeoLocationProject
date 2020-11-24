@@ -1,0 +1,23 @@
+<form [formGroup]="distanceForm" >
+<div class="col-md-4 offset-4">
+  <div class="form-group  ">
+  <label for="sourceInput"> Source</label>
+
+    <input type="text" class="form-control" formControlName="source" id="sourceInput" required>
+
+  </div>
+
+  <div class="form-group ">
+  <label for="destinationInput">
+    Destination</label>
+    <input type="text" class="form-control" formControlName="destination" id="destinationInput" required>
+   </div>
+
+   <div class="seperator">
+  
+   </div>
+   <div class="form-group button">
+    <button type="submit" class="btn " (click)="onSubmit()" [disabled]="!distanceForm.valid">calculate the distance</button>
+</div>
+</div>
+</form>
