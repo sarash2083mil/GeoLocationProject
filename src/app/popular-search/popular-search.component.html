@@ -26,7 +26,8 @@
     <div *ngIf="!numOfRequests">
         <h5 class="white_p not_aviable"> list of popular results is'nt aviable</h5>
     </div>
-    <div class="most-popular-lists col-md-6 offset-2 " *ngIf="numOfRequests">
+    <!-- *ngIf="numOfRequests" -->
+    <div class="most-popular-lists col-md-6 offset-2 " *ngIf="numOfRequests" >
         <h5 class="white_p">list of popular results</h5>
         <list-item [searchItem]="searchItem" *ngFor="let searchItem of popularSearchesList"></list-item>
     </div>

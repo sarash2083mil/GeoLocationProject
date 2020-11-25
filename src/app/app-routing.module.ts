@@ -6,7 +6,7 @@ import { PopularSearchComponent } from './popular-search/popular-search.componen
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "home" },
   { path: "home", component: DistanceFormComponent },
-  {path:"popular-search", component: PopularSearchComponent}];
+  { path: "popular-search", component: PopularSearchComponent }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

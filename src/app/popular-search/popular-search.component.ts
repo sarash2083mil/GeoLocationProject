@@ -12,6 +12,7 @@ export class PopularSearchComponent implements OnInit {
 
   constructor(private router: Router, private popularSearchService: PopularSearchService,
     private getDistanceService: GetDistanceService) { }
+
   origin: string;
   destination: string;
   numOfRequests;
@@ -19,15 +20,21 @@ export class PopularSearchComponent implements OnInit {
   popularSearchesList = [];
 
   ngOnInit(): void {
+    this.popularSearchesList = [
+      { source: "tel-aviv", destination: "haifa", hits: "5" },
+      { source: "beer-sheva", destination: "haifa", hits: "4" },
+      { source: "jericho", destination: "yafo", hits: "1" }
+    ]
     this.getDistance();
     this.getPopularSearch();
     this.getPopularSearchesList();
+
   }
 
   getDistance() {
     this.getDistanceService.distanceInKm
       .subscribe((dis) => {
-          this.distanceInKm = dis["distance"];
+        this.distanceInKm = dis["distance"];
       })
   }
 
@@ -35,11 +42,11 @@ export class PopularSearchComponent implements OnInit {
     this.popularSearchService.getPopularSearch()
       .subscribe((data) => {
         console.log(data);
-        this.origin = data["source"];
-        this.destination = data["destination"];
-        this.numOfRequests = data["hits"];
-        // {source: THE_SOURCE, destination: THE_DESTINATION,
-        //   hits: TOTAL_NUMBER_OF_HITS}
+        if (data) {
+          this.origin = data["source"];
+          this.destination = data["destination"];
+          this.numOfRequests = data["hits"];
+        }
       });
   }
 
@@ -47,6 +54,7 @@ export class PopularSearchComponent implements OnInit {
     this.popularSearchService.getPopularSearchsList().subscribe(
       (data) => {
         console.log(data);
+
         //assign to poular search list
       }
     )
@@ -55,8 +63,5 @@ export class PopularSearchComponent implements OnInit {
   close() {
     this.router.navigateByUrl('/home');
   }
-
-
-
 
 }

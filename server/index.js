@@ -6,6 +6,7 @@ port = 3080;
 var PgDatabase = require('./connectPg');
 const popularSearch = require('./popularSearch');
 var googleDistanceMetrixApi = require('./connectGoogleApi');
+const connectPg = require('./connectPg');
 
 const distances = [];
 var queryParams = {};
@@ -16,43 +17,32 @@ app.use(bodyParser.json());
 
 app.get('/api/distance', (req, res) => {
   queryParams = url.parse(req.url, true).query;
-  popularSearch.pushInSearches(queryParams.source, queryParams.destination);
   var ans;
-  ans = googleDistanceMetrixApi
-    .getDistanceFromGoogle(queryParams.source, queryParams.destination);
-  // source = ans.source;
-  // destination = ans.destination;
-  // res.body = {distance: ans.distance.text};
-  console.log(ans);
   try {
     ans = PgDatabase.getDistance(queryParams);
-    if(!ans){
-     ans = googleDistanceMetrixApi
-      .getDistanceFromGoogle(queryParams.source,queryParams.destination);
-      console.log(ans);
+    if (ans) {
       source = ans.source;
       destination = ans.destination;
-      res.body = {distance: ans.distance.text};
+      res.body = { distance: ans.distance };
     }
+    else res.body = { distance: '123 km' };
   } catch (error) {
-    console.log('error occured when Pgdatabase called'+error)
+    console.log('error occured when Pgdatabase called' + error)
   }
- // res.body = { distance: ans && ans.distance ? ans.distance.text : {} }
-  res.body ={ distance: '123 km'};
   res.send(res.body)
 });
 
 
 app.get('/api/popular-search', (req, res) => {
-  var ans = popularSearch.findMaxNumberOfHits();
+  var ans = connectPg.getTopRows(1);
   res.body = ans;
   res.send(res.body)
 });
 
 app.get('/api/popular-search-list', (req, res) => {
-
-  var ans = popularSearch.findTopPopularSearches();
-  // res.body = ans;
+  const listLimit = 5;
+  var ans = connectPg.getTopRows(listLimit);
+  res.body = ans;
   res.send(res.body)
 });
 

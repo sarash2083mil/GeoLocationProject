@@ -15,12 +15,11 @@ export class ListItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('input data'+this.searchItem)
-    if(this.searchItem)
-    {
+    console.log('input data' + this.searchItem)
+    if (this.searchItem) {
       this.sourcePlace = this.searchItem['source'];
-      this.destPlace= this.searchItem['destination'];
-      this.numOfRequests= this.searchItem['hits'];;
+      this.destPlace = this.searchItem['destination'];
+      this.numOfRequests = this.searchItem['hits'];;
     }
   }
 
