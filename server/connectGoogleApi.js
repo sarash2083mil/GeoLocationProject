@@ -11,6 +11,7 @@ function avoidSecureProblems() {
 
 const careJsonReslt = (dataString) => {
   var json = JSON.parse(dataString);
+  console.log(json);
   // distance: { text: '152 km', value: 151986 },
   // duration: { text: '1 hour 47 mins', value: 6400 },
   // status: 'OK'

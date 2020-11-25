@@ -17,7 +17,7 @@ export class PopularSearchComponent implements OnInit {
   destination: string;
   numOfRequests;
   distanceInKm;
-  popularSearchesList = [];
+  popularSearchesList;
 
   ngOnInit(): void {
     this.popularSearchesList = [
@@ -54,8 +54,9 @@ export class PopularSearchComponent implements OnInit {
     this.popularSearchService.getPopularSearchsList().subscribe(
       (data) => {
         console.log(data);
-
-        //assign to poular search list
+      if(data){
+        this.popularSearchesList = data;
+      }
       }
     )
   }

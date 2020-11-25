@@ -3,12 +3,10 @@ const url = require('url');
 const app = express(),
   bodyParser = require("body-parser");
 port = 3080;
-var PgDatabase = require('./connectPg');
-const popularSearch = require('./popularSearch');
+
 var googleDistanceMetrixApi = require('./connectGoogleApi');
 const connectPg = require('./connectPg');
 
-const distances = [];
 var queryParams = {};
 var source;
 var destination;
@@ -19,7 +17,7 @@ app.get('/api/distance', (req, res) => {
   queryParams = url.parse(req.url, true).query;
   var ans;
   try {
-    ans = PgDatabase.getDistance(queryParams);
+    ans = connectPg.getDistance(queryParams);
     if (ans) {
       source = ans.source;
       destination = ans.destination;
@@ -34,21 +32,32 @@ app.get('/api/distance', (req, res) => {
 
 
 app.get('/api/popular-search', (req, res) => {
-  var ans = connectPg.getTopRows(1);
+  var ans;
+  connectPg.getTopRows(1, (res) => {
+    if (res && res.length)
+      ans = res[0];
+  });
   res.body = ans;
   res.send(res.body)
 });
 
 app.get('/api/popular-search-list', (req, res) => {
   const listLimit = 5;
-  var ans = connectPg.getTopRows(listLimit);
+  var ans;
+  connectPg.getTopRows(listLimit, (res) => {
+    ans = res;
+  });
   res.body = ans;
   res.send(res.body)
 });
 
 
-app.get('/', (req, res) => {
-  res.send('App Works !!!!');
+app.get('/*', (req, res) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials",true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Accept,X-Access-Token,X-Key,Authorization,X-Requested-With,Origin,Access-Control-Allow-Origin,Access-Control-Allow-Credentials');
+//  res.send('App Works !!!!');
 });
 
 app.listen(port, () => {

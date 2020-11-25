@@ -8,7 +8,6 @@ var isConnected = false;
 
 const pool = new Pool(details);
 pool.query('SELECT NOW()', (err, res) => {
-  console.log(res.rows);
   pool.end()
 })
 
@@ -17,7 +16,6 @@ const client = new Client(details);
 client.connect()
   .then(() => {
     isConnected = true;
-    console.log(getTopRows(1));
   }).catch((reason) => {
     console.log(reason);
     isConnected = false;
@@ -33,14 +31,13 @@ const getDistance = (condition, res) => {
     if (err) {
       console.log(err.stack);
     } else {
-      console.log(res);
       if (res.rowCount > 0) {
-        console.log(res.rows);
         updateRow(res.rows[0].id, res.rows[0].hits);
         ans = res.rows[0];
       }
       else {
         ans = distanceMatrixApi.getDistanceFromGoogle(conditionValues);
+        console.log(ans);
         if (ans != undefined && ans != {}) {
           ans.distance = stringCare.retrieveNumericPart(ans.distance.text);
           insertRow(ans);
@@ -57,8 +54,6 @@ const insertRow = (data) => {
   client.query(insertText, values, (err, res) => {
     if (err) {
       console.log(err.stack)
-    } else {
-      console.log(res.rows[0])
     }
   })
 }
@@ -68,22 +63,21 @@ const updateRow = (id, hits) => {
   client.query(updateText, data, (err, res) => {
     if (err) {
       console.log(err.stack)
-    } else {
-      console.log(res.rows[0])
-    }
+    } 
   })
 }
 
-const getTopRows = (limit) => {
-  const text = `select * from distances order by hits desc limit ${limit}`;
+const getTopRows = (limit,callback) => {
+  const text = `select source,destination,hits from distances order by hits desc limit ${limit}`;
   var ans =[];
-   client.query(text, (err, res) => {
+  client.query(text, (err, res) => {
     if (err) {
       console.log(err.stack)
     } else {
-      console.log([res.rows[0]])
+      //console.log([res.rows[0]])
       ans = res.rows[0];
     } 
+    callback(ans);
   })
  
 }
