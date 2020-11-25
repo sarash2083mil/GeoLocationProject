@@ -11,7 +11,6 @@ function avoidSecureProblems() {
 
 const careJsonReslt = (dataString) => {
   var json = JSON.parse(dataString);
-  console.log(json);
   // distance: { text: '152 km', value: 151986 },
   // duration: { text: '1 hour 47 mins', value: 6400 },
   // status: 'OK'
@@ -27,12 +26,12 @@ const careJsonReslt = (dataString) => {
       distance: json.rows[0].elements[0].distance
     }
   }
+  console.log(returnedObject);
   return returnedObject;
 }
 
 const getDistanceFromGoogle = (origin, destination) => {
   avoidSecureProblems();
-
   apiUrl = apiUrl + '?origins=' + origin +
     '&destinations=' + destination +
     '&key=' + API_KEY;

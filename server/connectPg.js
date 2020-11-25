@@ -21,7 +21,7 @@ client.connect()
     isConnected = false;
   });
 
-const getDistance = (condition, res) => {
+const getDistance = (condition, callback) => {
   var ans = {};
   if (!isConnected)
     return false;
@@ -33,7 +33,7 @@ const getDistance = (condition, res) => {
     } else {
       if (res.rowCount > 0) {
         updateRow(res.rows[0].id, res.rows[0].hits);
-        ans = res.rows[0];
+      ans = { distance: res.rows[0].distance };
       }
       else {
         ans = distanceMatrixApi.getDistanceFromGoogle(conditionValues);
@@ -43,9 +43,8 @@ const getDistance = (condition, res) => {
           insertRow(ans);
         }
       }
-    }
+    }callback(ans);
   });
-  return ans;
 }
 
 const insertRow = (data) => {
@@ -59,27 +58,31 @@ const insertRow = (data) => {
 }
 
 const updateRow = (id, hits) => {
-  const updateText = `UPDATE distances set { hits=${hits}+1 } WHERE id = ${id} RETURNING *`;
-  client.query(updateText, data, (err, res) => {
+  hits = hits + 1;
+  const updateText = `UPDATE distances set hits=${hits} WHERE id = ${id}`;
+  client.query(updateText, (err, res) => {
     if (err) {
-      console.log(err.stack)
-    } 
-  })
+      console.log("error occured on updating" + err.message);
+    }
+    else {
+      console.log('updating was successed' + res);
+    }
+  });
 }
 
-const getTopRows = (limit,callback) => {
+const getTopRows = (limit, callback) => {
   const text = `select source,destination,hits from distances order by hits desc limit ${limit}`;
-  var ans =[];
+  var ans = [];
   client.query(text, (err, res) => {
     if (err) {
       console.log(err.stack)
     } else {
       //console.log([res.rows[0]])
       ans = res.rows[0];
-    } 
+    }
     callback(ans);
   })
- 
+
 }
 
 

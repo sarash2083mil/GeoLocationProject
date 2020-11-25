@@ -34,7 +34,7 @@ export class PopularSearchComponent implements OnInit {
   getDistance() {
     this.getDistanceService.distanceInKm
       .subscribe((dis) => {
-        this.distanceInKm = dis["distance"];
+        this.distanceInKm = dis;
       })
   }
 
@@ -54,9 +54,9 @@ export class PopularSearchComponent implements OnInit {
     this.popularSearchService.getPopularSearchsList().subscribe(
       (data) => {
         console.log(data);
-      if(data){
-        this.popularSearchesList = data;
-      }
+        if (data) {
+          this.popularSearchesList = data;
+        }
       }
     )
   }

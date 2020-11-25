@@ -9,17 +9,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./distance-form.component.scss']
 })
 export class DistanceFormComponent implements OnInit {
-  distanceForm:FormGroup;
+  distanceForm: FormGroup;
   source: string;
   destination: string;
   distance;
-  constructor(private getDistanceService:GetDistanceService,
-    private router:Router) { }
+  constructor(private getDistanceService: GetDistanceService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.distanceForm = new FormGroup({
       source: new FormControl(''),
-      destination: new FormControl('')})
+      destination: new FormControl('')
+    })
   }
 
   onSubmit() {
@@ -28,11 +29,12 @@ export class DistanceFormComponent implements OnInit {
     console.warn(this.distanceForm.value);
     this.destination = this.distanceForm.value.destination;
     this.source = this.distanceForm.value.source;
-    this.getDistanceService.getDistance(this.destination,this.source).subscribe( data=>
-     {
+    this.getDistanceService.getDistance(this.source, this.destination).subscribe((data) => {
       console.log(data);
+     // if (data && data.distance)
+        this.distance = data["distance"];
       this.goToAnswer();
-     } 
+    }
     )
     this.goToAnswer();
   }

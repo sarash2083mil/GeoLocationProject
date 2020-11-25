@@ -16,7 +16,8 @@ export class GetDistanceService {
   getDistance(source: string, destination: string) {
     return this.http.get(this.rootURL + '/distance?source=' + source + '&destination=' + destination)
       .pipe(
-        map(data => this.distanceInKm.next(data['distance'])),
+        map(data => {
+           this.distanceInKm.next(data['distance']) }),
         catchError(err => this.handleError(err))
       )
   }

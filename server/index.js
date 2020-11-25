@@ -15,19 +15,18 @@ app.use(bodyParser.json());
 
 app.get('/api/distance', (req, res) => {
   queryParams = url.parse(req.url, true).query;
-  var ans;
+  var result;
   try {
-    ans = connectPg.getDistance(queryParams);
-    if (ans) {
-      source = ans.source;
-      destination = ans.destination;
-      res.body = { distance: ans.distance };
-    }
-    else res.body = { distance: '123 km' };
+    connectPg.getDistance(queryParams, (ans) => {
+      if (ans) {
+        result = ans;
+        res.body = ans;
+      } else res.body = {};
+      res.send(res.body)
+    });
   } catch (error) {
     console.log('error occured when Pgdatabase called' + error)
   }
-  res.send(res.body)
 });
 
 
@@ -54,10 +53,10 @@ app.get('/api/popular-search-list', (req, res) => {
 
 app.get('/*', (req, res) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header("Access-Control-Allow-Credentials",true);
+  res.header("Access-Control-Allow-Credentials", true);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Accept,X-Access-Token,X-Key,Authorization,X-Requested-With,Origin,Access-Control-Allow-Origin,Access-Control-Allow-Credentials');
-//  res.send('App Works !!!!');
+  //  res.send('App Works !!!!');
 });
 
 app.listen(port, () => {
